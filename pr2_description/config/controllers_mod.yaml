@@ -97,16 +97,16 @@ pr2:
       stop_trajectory_duration: 0        # Override default
       
     head_pan_joint_controller:
-      type: effort_controllers/JointPositionController
+      type: position_controllers/JointPositionController
       joint: head_pan_joint
       pid: {p: 25.0, i: 12.0, d: 2.0}
       
     head_tilt_joint_controller:
-      type: effort_controllers/JointPositionController
+      type: position_controllers/JointPositionController
       joint: head_tilt_joint
       pid: {p: 49.6, i: 2.0, d: 1.6}
       
     laser_tilt_mount_joint_controller:
-      type: effort_controllers/JointPositionController
+      type: position_controllers/JointPositionController
       joint: laser_tilt_mount_joint
       pid: {p: 8.0, i: 0.1, d: 0.2}
