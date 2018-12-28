@@ -36,7 +36,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://pr2_description/meshes/tilting_laser_v0/tilting_hokuyo.dae" />
+          <mesh filename="package://pr2_description/meshes/tilting_laser_v0/tilting_hokuyo_png.dae" />
         </geometry>
         
         <material name="Red" />

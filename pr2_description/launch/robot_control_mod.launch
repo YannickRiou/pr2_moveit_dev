@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch>
   <!--Load the joint controllers to param server-->
-  <rosparam file="$(find pr2_description)/config/controllers.yaml" command="load"/>
+  <rosparam file="$(find pr2_description)/config/controllers_mod.yaml" command="load"/>
 
   <!--Load controllers-->
   <node name="spawner" pkg="controller_manager" type="spawner" respawn="false"
@@ -11,5 +11,9 @@
     torso_lift_joint_controller
     left_gripper_controller
     right_gripper_controller
-    world_joint_controller"/>
+    world_joint_controller
+    head_pan_joint_controller
+    head_tilt_joint_controller
+    laser_tilt_mount_joint_controller
+    "/>
 </launch>
