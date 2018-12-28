@@ -52,7 +52,7 @@
   <xacro:include filename="$(find pr2_description)/urdf/common.xacro" />
   <xacro:include filename="$(find pr2_description)/urdf/materials.urdf.xacro" />
   <xacro:include filename="$(find pr2_description)/urdf/pr2.gazebo.xacro" />
-  <xacro:include filename="$(find pr2_description)/urdf/sensor.urdf.xacro" />
+  <xacro:include filename="$(find pr2_description)/urdf/sensor_mod.urdf.xacro" />
 
   <!--Links-->
   <link name="world"/>
