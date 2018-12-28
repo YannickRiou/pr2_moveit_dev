@@ -103,7 +103,7 @@ pr2:
       
     head_tilt_joint_controller:
       type: effort_controllers/JointPositionController
-      joint: torso_lift_joint
+      joint: head_tilt_joint
       pid: {p: 49.6, i: 2.0, d: 1.6}
       
     laser_tilt_mount_joint_controller:
