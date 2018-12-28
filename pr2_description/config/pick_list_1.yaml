@@ -1,0 +1,9 @@
+object_list:
+  - name: biscuits
+    group: green
+  - name: soap
+    group: green
+  - name: soap2
+    group: red
+test_world_num: 1
+  
