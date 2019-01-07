@@ -23,6 +23,7 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   roslint
   sensor_msgs
+  geometry_msgs
 )
 find_package(Eigen3 REQUIRED)
 find_package(Boost REQUIRED)
@@ -75,6 +76,7 @@ add_service_files(
   PickPlace.srv
 	Grasp.srv
 	GetNormals.srv
+	Pr2Move.srv
 )
 
 ## Generate actions in the 'action' folder

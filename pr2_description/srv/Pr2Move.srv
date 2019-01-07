@@ -1,0 +1,5 @@
+geometry_msgs/Pose pose       # Pose to move tcp to
+float64[] joints_array # Alternative joints positions array.
+std_msgs/String movement_type # Supported JOINTS, TCP
+---
+bool success         # Did it achieve it?
