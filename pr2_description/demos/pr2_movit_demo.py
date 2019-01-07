@@ -313,11 +313,50 @@ def Test5_get_ee_pose_leftarm():
     move_pr2_obj = MovePR2()
     move_pr2_obj.ee_pose(group_name = "left_arm")
     rospy.spin()
+    
+    
+def Test6_move_left_and_right_arm():
+    move_pr2_obj = MovePR2()
+    
+    end_effector_pose = Pose()
+    
+
+    # Prepick pose Biscuits
+    end_effector_pose.position.x = 0.56
+    end_effector_pose.position.y = -0.24
+    end_effector_pose.position.z = 0.97
+    
+    end_effector_pose.orientation.x = 0.5
+    end_effector_pose.orientation.y = 0.5
+    end_effector_pose.orientation.z = -0.5
+    end_effector_pose.orientation.w = 0.5
+     
+    move_response = Pr2MoveResponse()
+    move_response.success = move_pr2_obj.ee_traj(   pose = end_effector_pose,
+                                                    group_name = "right_arm")
+                                                    
+                                                    
+    # Init pose
+    # Prepick pose Biscuits
+    end_effector_pose.position.x = 0.56
+    end_effector_pose.position.y = 0.24
+    end_effector_pose.position.z = 0.97
+    
+    end_effector_pose.orientation.x = 0.5
+    end_effector_pose.orientation.y = 0.5
+    end_effector_pose.orientation.z = -0.5
+    end_effector_pose.orientation.w = 0.5
+     
+    move_response = Pr2MoveResponse()
+    move_response.success = move_pr2_obj.ee_traj(   pose = end_effector_pose,
+                                                    group_name = "left_arm")
+
+    rospy.spin()
 
 
 if __name__ == '__main__':
     rospy.init_node('pr2_move_node', anonymous=True, log_level=rospy.DEBUG)
-    Test4_move_leftarm()
+    Test6_move_left_and_right_arm()
     
    
     
