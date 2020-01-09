@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+
+    <arg name="x" default="0.0" />
+    <arg name="y" default="0.0" />
+    <arg name="z" default="0.0" />
+    <arg name="roll" default="0.0"/>
+    <arg name="pitch" default="0.0"/>
+    <arg name="yaw" default="0.0"/>
+
+
+  <!--Include description and control launch files-->
+  <include file="$(find pr2_pickplace)/launch/robot_description_mod.launch"/>
+  <include file="$(find pr2_pickplace)/launch/robot_control_mod.launch"/>
+  <include file="$(find pr2_moveit_newurdf)/launch/move_group.launch"/>
+
+  <rosparam command="load" file="$(find pr2_moveit_newurdf)/config/grasp.yaml"/>
+  <rosparam command="load" file="$(find pr2_pickplace)/config/dropbox.yaml"/>
+
+  <!--spawn a robot in gazebo world-->
+  <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false"
+    output="screen" args="-urdf -param robot_description
+     -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg roll) -P $(arg pitch) -Y $(arg yaw) -model pr2 "/>
+
+  <!--PR2 motion node-->
+  <node name="pr2_grasp_server" pkg="pr2_pickplace" type="grasp_server.py"
+    respawn="false" output="screen"/>
+
+  <node name="pr2_cloud_transformer" pkg="pr2_pickplace" type="pr2_cloud_transformer"
+    respawn="false" output="screen">
+    <param name="demo" type="bool" value="false"/>
+  </node>
+
+  <node name="pr2_pick_place_server" pkg="pr2_pickplace" type="pr2_pick_place_server"
+    respawn="false" output="screen"/>
+
+  <!--TODO:Change the list name based on the scene you have loaded-->
+  <rosparam command="load" file="$(find pr2_pickplace)/config/pick_list_2.yaml"/>
+
+  <!--launch rviz-->
+  <node name="$(anon rviz)" pkg="rviz" type="rviz" respawn="false"
+    output="screen" args="-d $(find pr2_pickplace)/config/pr2.rviz"/>
+  <!-- The feature extractor node -->
+  <node name="pr2_feature_extractor" pkg="pr2_pickplace" type="pr2_feature_extractor" respawn="false"/>
+
+</launch>

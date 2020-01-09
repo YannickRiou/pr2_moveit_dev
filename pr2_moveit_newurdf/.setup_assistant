@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: ""
+    relative_path: /home/yriou/Documents/URDF-PR2/robot_calibrated_2019_11_19_16_58.xml
+    xacro_args: "--inorder "
+  SRDF:
+    relative_path: config/pr2.srdf
+  CONFIG:
+    author_name: Yannick Riou
+    author_email: yannick.riou@laas.fr
+    generated_timestamp: 1578496809
