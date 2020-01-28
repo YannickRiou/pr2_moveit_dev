@@ -17,11 +17,20 @@ controller_list:
       - r_forearm_roll_joint
       - r_wrist_flex_joint
       - r_wrist_roll_joint
-  - name: fake_right_gripper_controller
-    joints:
-      - r_gripper_l_finger_joint
-      - r_gripper_joint
   - name: fake_left_gripper_controller
     joints:
       - l_gripper_l_finger_joint
+      - l_gripper_motor_screw_joint
       - l_gripper_joint
+  - name: fake_head_controller
+    joints:
+      - head_pan_joint
+      - head_tilt_joint
+  - name: fake_right_gripper_controller
+    joints:
+      - r_gripper_l_finger_joint
+      - r_gripper_motor_screw_joint
+      - r_gripper_joint
+  - name: fake_torso_controller
+    joints:
+      - torso_lift_joint

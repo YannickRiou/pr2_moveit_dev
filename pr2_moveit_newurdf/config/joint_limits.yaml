@@ -2,6 +2,16 @@
 # Specific joint properties can be changed with the keys [max_position, min_position, max_velocity, max_acceleration]
 # Joint limits can be turned off with [has_velocity_limits, has_acceleration_limits]
 joint_limits:
+  head_pan_joint:
+    has_velocity_limits: true
+    max_velocity: 6
+    has_acceleration_limits: false
+    max_acceleration: 0
+  head_tilt_joint:
+    has_velocity_limits: true
+    max_velocity: 5
+    has_acceleration_limits: false
+    max_acceleration: 0
   l_elbow_flex_joint:
     has_velocity_limits: true
     max_velocity: 3.3
@@ -25,6 +35,11 @@ joint_limits:
   l_gripper_l_finger_tip_joint:
     has_velocity_limits: true
     max_velocity: 0.5
+    has_acceleration_limits: false
+    max_acceleration: 0
+  l_gripper_motor_screw_joint:
+    has_velocity_limits: false
+    max_velocity: 0
     has_acceleration_limits: false
     max_acceleration: 0
   l_gripper_r_finger_joint:
@@ -87,6 +102,11 @@ joint_limits:
     max_velocity: 0.5
     has_acceleration_limits: false
     max_acceleration: 0
+  r_gripper_motor_screw_joint:
+    has_velocity_limits: false
+    max_velocity: 0
+    has_acceleration_limits: false
+    max_acceleration: 0
   r_gripper_r_finger_joint:
     has_velocity_limits: true
     max_velocity: 0.5
@@ -120,5 +140,10 @@ joint_limits:
   r_wrist_roll_joint:
     has_velocity_limits: true
     max_velocity: 3.6
+    has_acceleration_limits: false
+    max_acceleration: 0
+  torso_lift_joint:
+    has_velocity_limits: true
+    max_velocity: 0.013
     has_acceleration_limits: false
     max_acceleration: 0

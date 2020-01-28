@@ -121,7 +121,7 @@ planner_configs:
     dense_delta_fraction: 0.001  # delta fraction for interface detection. default: 0.001
     max_failures: 5000  # maximum consecutive failure limit. default: 5000
 left_arm:
-  default_planner_config: RRT
+  default_planner_config: None
   planner_configs:
     - SBL
     - EST
@@ -149,7 +149,7 @@ left_arm:
   projection_evaluator: joints(l_shoulder_pan_joint,l_shoulder_lift_joint)
   longest_valid_segment_fraction: 0.005
 right_arm:
-  default_planner_config: RRT
+  default_planner_config: None
   planner_configs:
     - SBL
     - EST
@@ -175,6 +175,62 @@ right_arm:
     - SPARS
     - SPARStwo
   projection_evaluator: joints(r_shoulder_pan_joint,r_shoulder_lift_joint)
+  longest_valid_segment_fraction: 0.005
+left_gripper:
+  default_planner_config: ""
+  planner_configs:
+    - SBL
+    - EST
+    - LBKPIECE
+    - BKPIECE
+    - KPIECE
+    - RRT
+    - RRTConnect
+    - RRTstar
+    - TRRT
+    - PRM
+    - PRMstar
+    - FMT
+    - BFMT
+    - PDST
+    - STRIDE
+    - BiTRRT
+    - LBTRRT
+    - BiEST
+    - ProjEST
+    - LazyPRM
+    - LazyPRMstar
+    - SPARS
+    - SPARStwo
+  projection_evaluator: joints(l_gripper_l_finger_joint,l_gripper_l_finger_tip_joint)
+  longest_valid_segment_fraction: 0.005
+head:
+  default_planner_config: ""
+  planner_configs:
+    - SBL
+    - EST
+    - LBKPIECE
+    - BKPIECE
+    - KPIECE
+    - RRT
+    - RRTConnect
+    - RRTstar
+    - TRRT
+    - PRM
+    - PRMstar
+    - FMT
+    - BFMT
+    - PDST
+    - STRIDE
+    - BiTRRT
+    - LBTRRT
+    - BiEST
+    - ProjEST
+    - LazyPRM
+    - LazyPRMstar
+    - SPARS
+    - SPARStwo
+  projection_evaluator: joints(head_pan_joint,head_tilt_joint)
   longest_valid_segment_fraction: 0.005
 right_gripper:
   default_planner_config: ""
@@ -202,8 +258,10 @@ right_gripper:
     - LazyPRMstar
     - SPARS
     - SPARStwo
-left_gripper:
-  default_planner_config: None
+  projection_evaluator: joints(r_gripper_l_finger_joint,r_gripper_l_finger_tip_joint)
+  longest_valid_segment_fraction: 0.005
+torso:
+  default_planner_config: ""
   planner_configs:
     - SBL
     - EST

@@ -1,19 +1,37 @@
 Panels:
   - Class: rviz/Displays
-    Help Height: 84
+    Help Height: 0
     Name: Displays
     Property Tree Widget:
       Expanded:
+        - /Global Options1
+        - /Status1
         - /MotionPlanning1
-      Splitter Ratio: 0.74256
-    Tree Height: 664
-  - Class: rviz/Help
-    Name: Help
+        - /MotionPlanning1/Planning Request1
+        - /Marker1
+      Splitter Ratio: 0.5
+    Tree Height: 170
+  - Class: rviz/Selection
+    Name: Selection
+  - Class: rviz/Tool Properties
+    Expanded:
+      - /2D Pose Estimate1
+      - /2D Nav Goal1
+      - /Publish Point1
+    Name: Tool Properties
+    Splitter Ratio: 0.588679016
   - Class: rviz/Views
     Expanded:
       - /Current View1
     Name: Views
     Splitter Ratio: 0.5
+  - Class: rviz/Time
+    Experimental: false
+    Name: Time
+    SyncMode: 0
+    SyncSource: Image
+Toolbars:
+  toolButtonStyle: 2
 Visualization Manager:
   Class: ""
   Displays:
@@ -23,7 +41,7 @@ Visualization Manager:
       Color: 160; 160; 164
       Enabled: true
       Line Style:
-        Line Width: 0.03
+        Line Width: 0.0299999993
         Value: Lines
       Name: Grid
       Normal Cell Count: 0
@@ -35,16 +53,39 @@ Visualization Manager:
       Plane Cell Count: 10
       Reference Frame: <Fixed Frame>
       Value: true
-    - Class: moveit_rviz_plugin/MotionPlanning
+    - Acceleration_Scaling_Factor: 1
+      Class: moveit_rviz_plugin/MotionPlanning
       Enabled: true
+      Move Group Namespace: ""
+      MoveIt_Allow_Approximate_IK: false
+      MoveIt_Allow_External_Program: false
+      MoveIt_Allow_Replanning: false
+      MoveIt_Allow_Sensor_Positioning: false
       MoveIt_Goal_Tolerance: 0
+      MoveIt_Planning_Attempts: 10
       MoveIt_Planning_Time: 5
       MoveIt_Use_Constraint_Aware_IK: true
       MoveIt_Warehouse_Host: 127.0.0.1
       MoveIt_Warehouse_Port: 33829
+      MoveIt_Workspace:
+        Center:
+          X: 0
+          Y: 0
+          Z: 0
+        Size:
+          X: 2
+          Y: 2
+          Z: 2
       Name: MotionPlanning
       Planned Path:
+        Color Enabled: false
+        Interrupt Display: false
         Links:
+          All Links Enabled: true
+          Expand Joint Details: false
+          Expand Link Details: false
+          Expand Tree: false
+          Link Tree Style: Links in Alphabetic Order
           base_bellow_link:
             Alpha: 1
             Show Axes: false
@@ -55,6 +96,10 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          base_laser_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           base_link:
             Alpha: 1
             Show Axes: false
@@ -125,26 +170,33 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          head_mount_kinect_ir_link:
+          head_chain_cb_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          head_mount_kinect2_ir_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          head_mount_kinect_rgb_link:
+          head_mount_kinect2_ir_optical_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          head_mount_kinect2_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          head_mount_link:
+          head_mount_kinect2_rgb_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          head_mount_prosilica_link:
+          head_mount_kinect2_rgb_optical_frame:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-            Value: true
           head_pan_link:
             Alpha: 1
             Show Axes: false
@@ -160,11 +212,31 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          high_def_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          high_def_optical_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          imu_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           l_elbow_flex_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
+          l_forearm_cam_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          l_forearm_cam_optical_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           l_forearm_link:
             Alpha: 1
             Show Axes: false
@@ -180,16 +252,32 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          l_gripper_l_finger_tip_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           l_gripper_l_finger_tip_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
+          l_gripper_led_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           l_gripper_motor_accelerometer_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
+          l_gripper_motor_screw_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          l_gripper_motor_slider_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           l_gripper_palm_link:
             Alpha: 1
             Show Axes: false
@@ -205,6 +293,10 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          l_gripper_tool_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           l_shoulder_lift_link:
             Alpha: 1
             Show Axes: false
@@ -215,6 +307,10 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          l_torso_lift_side_plate_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           l_upper_arm_link:
             Alpha: 1
             Show Axes: false
@@ -235,16 +331,64 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          laser_tilt_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           laser_tilt_mount_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
+          left_arm_chain_cb_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          narrow_stereo_l_stereo_camera_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          narrow_stereo_l_stereo_camera_optical_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          narrow_stereo_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          narrow_stereo_optical_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          narrow_stereo_r_stereo_camera_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          narrow_stereo_r_stereo_camera_optical_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          projector_wg6802418_child_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          projector_wg6802418_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           r_elbow_flex_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
+          r_forearm_cam_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          r_forearm_cam_optical_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           r_forearm_link:
             Alpha: 1
             Show Axes: false
@@ -260,16 +404,32 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          r_gripper_l_finger_tip_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           r_gripper_l_finger_tip_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
+          r_gripper_led_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           r_gripper_motor_accelerometer_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
+          r_gripper_motor_screw_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          r_gripper_motor_slider_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           r_gripper_palm_link:
             Alpha: 1
             Show Axes: false
@@ -285,6 +445,10 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          r_gripper_tool_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           r_shoulder_lift_link:
             Alpha: 1
             Show Axes: false
@@ -295,6 +459,10 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          r_torso_lift_side_plate_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           r_upper_arm_link:
             Alpha: 1
             Show Axes: false
@@ -315,6 +483,10 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          right_arm_chain_cb_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           sensor_mount_link:
             Alpha: 1
             Show Axes: false
@@ -325,26 +497,57 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-        Loop Animation: true
+          torso_lift_motor_screw_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          wide_stereo_l_stereo_camera_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          wide_stereo_l_stereo_camera_optical_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          wide_stereo_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          wide_stereo_optical_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          wide_stereo_r_stereo_camera_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          wide_stereo_r_stereo_camera_optical_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+        Loop Animation: false
         Robot Alpha: 0.5
+        Robot Color: 150; 50; 150
         Show Robot Collision: false
         Show Robot Visual: true
         Show Trail: false
         State Display Time: 0.05 s
-        Trajectory Topic: move_group/display_planned_path
+        Trail Step Size: 1
+        Trajectory Topic: /move_group/display_planned_path
       Planning Metrics:
         Payload: 1
         Show Joint Torques: false
         Show Manipulability: false
         Show Manipulability Index: false
         Show Weight Limit: false
+        TextHeight: 0.0799999982
       Planning Request:
         Colliding Link Color: 255; 0; 0
         Goal State Alpha: 1
         Goal State Color: 250; 128; 0
         Interactive Marker Size: 0
         Joint Violation Color: 255; 0; 255
-        Planning Group: left_arm
+        Planning Group: right_arm
         Query Goal State: true
         Query Start State: false
         Show Workspace: false
@@ -353,15 +556,20 @@ Visualization Manager:
       Planning Scene Topic: move_group/monitored_planning_scene
       Robot Description: robot_description
       Scene Geometry:
-        Scene Alpha: 1
+        Scene Alpha: 0.899999976
         Scene Color: 50; 230; 50
-        Scene Display Time: 0.2
+        Scene Display Time: 0.200000003
         Show Scene Geometry: true
         Voxel Coloring: Z-Axis
         Voxel Rendering: Occupied Voxels
       Scene Robot:
         Attached Body Color: 150; 50; 150
         Links:
+          All Links Enabled: true
+          Expand Joint Details: false
+          Expand Link Details: false
+          Expand Tree: false
+          Link Tree Style: Links in Alphabetic Order
           base_bellow_link:
             Alpha: 1
             Show Axes: false
@@ -372,6 +580,10 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          base_laser_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           base_link:
             Alpha: 1
             Show Axes: false
@@ -442,26 +654,33 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          head_mount_kinect_ir_link:
+          head_chain_cb_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          head_mount_kinect2_ir_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          head_mount_kinect_rgb_link:
+          head_mount_kinect2_ir_optical_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          head_mount_kinect2_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          head_mount_link:
+          head_mount_kinect2_rgb_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          head_mount_prosilica_link:
+          head_mount_kinect2_rgb_optical_frame:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-            Value: true
           head_pan_link:
             Alpha: 1
             Show Axes: false
@@ -477,11 +696,31 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          high_def_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          high_def_optical_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          imu_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           l_elbow_flex_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
+          l_forearm_cam_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          l_forearm_cam_optical_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           l_forearm_link:
             Alpha: 1
             Show Axes: false
@@ -497,16 +736,32 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          l_gripper_l_finger_tip_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           l_gripper_l_finger_tip_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
+          l_gripper_led_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           l_gripper_motor_accelerometer_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
+          l_gripper_motor_screw_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          l_gripper_motor_slider_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           l_gripper_palm_link:
             Alpha: 1
             Show Axes: false
@@ -522,6 +777,10 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          l_gripper_tool_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           l_shoulder_lift_link:
             Alpha: 1
             Show Axes: false
@@ -532,6 +791,10 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          l_torso_lift_side_plate_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           l_upper_arm_link:
             Alpha: 1
             Show Axes: false
@@ -552,16 +815,64 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          laser_tilt_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           laser_tilt_mount_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
+          left_arm_chain_cb_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          narrow_stereo_l_stereo_camera_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          narrow_stereo_l_stereo_camera_optical_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          narrow_stereo_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          narrow_stereo_optical_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          narrow_stereo_r_stereo_camera_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          narrow_stereo_r_stereo_camera_optical_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          projector_wg6802418_child_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          projector_wg6802418_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           r_elbow_flex_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
+          r_forearm_cam_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          r_forearm_cam_optical_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           r_forearm_link:
             Alpha: 1
             Show Axes: false
@@ -577,16 +888,32 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          r_gripper_l_finger_tip_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           r_gripper_l_finger_tip_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
+          r_gripper_led_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           r_gripper_motor_accelerometer_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
+          r_gripper_motor_screw_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          r_gripper_motor_slider_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           r_gripper_palm_link:
             Alpha: 1
             Show Axes: false
@@ -602,6 +929,10 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          r_gripper_tool_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           r_shoulder_lift_link:
             Alpha: 1
             Show Axes: false
@@ -612,6 +943,10 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          r_torso_lift_side_plate_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           r_upper_arm_link:
             Alpha: 1
             Show Axes: false
@@ -632,6 +967,10 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          right_arm_chain_cb_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           sensor_mount_link:
             Alpha: 1
             Show Axes: false
@@ -642,48 +981,126 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-        Robot Alpha: 0.5
-        Show Scene Robot: true
+          torso_lift_motor_screw_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          wide_stereo_l_stereo_camera_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          wide_stereo_l_stereo_camera_optical_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          wide_stereo_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          wide_stereo_optical_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          wide_stereo_r_stereo_camera_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          wide_stereo_r_stereo_camera_optical_frame:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+        Robot Alpha: 1
+        Show Robot Collision: false
+        Show Robot Visual: true
+      Value: true
+      Velocity_Scaling_Factor: 1
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: visualization_marker
+      Name: Marker
+      Namespaces:
+        rs: true
+        rs_name: true
+      Queue Size: 100
+      Value: true
+    - Class: rviz/Image
+      Enabled: true
+      Image Topic: /RoboSherlock_yriou/output_image
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: Image
+      Normalize Range: true
+      Queue Size: 2
+      Transport Hint: raw
+      Unreliable: false
       Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
-    Fixed Frame: /base_footprint
+    Default Light: true
+    Fixed Frame: base_footprint
+    Frame Rate: 30
   Name: root
   Tools:
     - Class: rviz/Interact
       Hide Inactive Objects: true
     - Class: rviz/MoveCamera
     - Class: rviz/Select
+    - Class: rviz/FocusCamera
+    - Class: rviz/Measure
+    - Class: rviz/SetInitialPose
+      Topic: /initialpose
+    - Class: rviz/SetGoal
+      Topic: /move_base_simple/goal
+    - Class: rviz/PublishPoint
+      Single click: true
+      Topic: /clicked_point
   Value: true
   Views:
     Current:
-      Class: rviz/XYOrbit
-      Distance: 2.9965
+      Class: rviz/Orbit
+      Distance: 6.81472015
+      Enable Stereo Rendering:
+        Stereo Eye Separation: 0.0599999987
+        Stereo Focal Distance: 1
+        Swap Stereo Eyes: false
+        Value: false
       Focal Point:
-        X: 0.113567
-        Y: 0.10592
-        Z: 2.23518e-07
+        X: 1.06698215
+        Y: -0.375635475
+        Z: 0.244763196
+      Focal Shape Fixed Size: true
+      Focal Shape Size: 0.0500000007
+      Invert Z Axis: false
       Name: Current View
-      Near Clip Distance: 0.01
-      Pitch: 0.509797
-      Target Frame: /base_footprint
-      Value: XYOrbit (rviz)
-      Yaw: 5.65995
+      Near Clip Distance: 0.00999999978
+      Pitch: 0.785398006
+      Target Frame: <Fixed Frame>
+      Value: Orbit (rviz)
+      Yaw: 1.45039761
     Saved: ~
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 1337
-  Help:
-    collapsed: false
+  Height: 846
   Hide Left Dock: false
-  Hide Right Dock: false
-  Motion Planning:
+  Hide Right Dock: true
+  Image:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd0000000100000000000002a2000004bcfc0200000005fb000000100044006900730070006c00610079007301000000410000032d000000dd00fffffffb0000000800480065006c00700000000342000000bb0000007600fffffffb0000000a0056006900650077007300000003b0000000b0000000b000fffffffb0000000c00430061006d00650072006100000002ff000001610000000000000000fb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e00670100000374000001890000017400ffffff0000047a000004bc00000001000000020000000100000002fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  MotionPlanning:
+    collapsed: false
+  MotionPlanning - Slider:
+    collapsed: false
+  QMainWindow State: 000000ff00000000fd0000000400000000000002a0000002adfc020000000bfb0000001200530065006c0065006300740069006f006e00000001e10000009b0000006700fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c0061007900730100000041000000eb000000e300fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb000000280020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000004300fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e0067000000012a000001850000017a00fffffffb0000000a0049006d0061006700650100000132000001bc0000001600ffffff000000010000010f000002adfc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a005600690065007700730000000041000002ad000000b300fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004b00000003efc0100000002fb0000000800540069006d00650100000000000004b00000028000fffffffb0000000800540069006d006501000000000000045000000000000000000000020a000002ad00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  Selection:
+    collapsed: false
+  Time:
+    collapsed: false
+  Tool Properties:
+    collapsed: false
   Views:
-    collapsed: false
-  Width: 1828
-  X: 459
-  Y: -243
+    collapsed: true
+  Width: 1200
+  X: 111
+  Y: 206

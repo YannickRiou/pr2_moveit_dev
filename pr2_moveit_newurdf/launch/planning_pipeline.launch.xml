@@ -7,4 +7,4 @@
 
   <include file="$(find pr2_moveit_newurdf)/launch/$(arg pipeline)_planning_pipeline.launch.xml" />
 
-</launch> 
+</launch>
