@@ -36,23 +36,27 @@
         <joint name="l_gripper_joint" />
         <joint name="l_gripper_l_finger_joint" />
         <joint name="l_gripper_r_finger_joint" />
-        <joint name="l_gripper_r_finger_tip_joint" />
         <joint name="l_gripper_l_finger_tip_joint" />
+        <joint name="l_gripper_r_finger_tip_joint" />
     </group>
     <group name="head">
         <joint name="head_pan_joint" />
         <joint name="head_tilt_joint" />
     </group>
     <group name="right_gripper">
-        <joint name="r_gripper_motor_screw_joint" />
-        <joint name="r_gripper_r_finger_joint" />
-        <joint name="r_gripper_r_finger_tip_joint" />
         <joint name="r_gripper_joint" />
+        <joint name="r_gripper_r_finger_tip_joint" />
+        <joint name="r_gripper_r_finger_joint" />
+        <joint name="r_gripper_motor_screw_joint" />
         <joint name="r_gripper_l_finger_tip_joint" />
         <joint name="r_gripper_l_finger_joint" />
     </group>
     <group name="torso">
         <joint name="torso_lift_joint" />
+    </group>
+    <group name="arms">
+        <group name="left_arm" />
+        <group name="right_arm" />
     </group>
     <!--GROUP STATES: Purpose: Define a named state for a particular group, in terms of joint values. This is useful to define states like 'folded arms'-->
     <group_state name="LEFT_ARM_INITIAL_POSE" group="left_arm">
@@ -87,25 +91,57 @@
     <group_state name="torso_down" group="torso">
         <joint name="torso_lift_joint" value="0.0115" />
     </group_state>
-    <group_state name="left_gripper_open" group="left_gripper">
-        <joint name="l_gripper_joint" value="0.0131" />
-        <joint name="l_gripper_l_finger_joint" value="0.548" />
-        <joint name="l_gripper_l_finger_tip_joint" value="0" />
-        <joint name="l_gripper_motor_screw_joint" value="3.1415" />
-        <joint name="l_gripper_r_finger_joint" value="0" />
-        <joint name="l_gripper_r_finger_tip_joint" value="0" />
+    <group_state name="right_open" group="right_gripper">
+        <joint name="r_gripper_joint" value="0.088" />
+        <joint name="r_gripper_l_finger_joint" value="0.477" />
+        <joint name="r_gripper_l_finger_tip_joint" value="0.477" />
+        <joint name="r_gripper_motor_screw_joint" value="1" />
+        <joint name="r_gripper_r_finger_joint" value="0.477" />
+        <joint name="r_gripper_r_finger_tip_joint" value="0.477" />
     </group_state>
-    <group_state name="left_gripper_close" group="left_gripper">
-        <joint name="l_gripper_joint" value="0.0131" />
-        <joint name="l_gripper_l_finger_joint" value="0" />
-        <joint name="l_gripper_l_finger_tip_joint" value="0" />
-        <joint name="l_gripper_motor_screw_joint" value="3.1415" />
-        <joint name="l_gripper_r_finger_joint" value="0" />
-        <joint name="l_gripper_r_finger_tip_joint" value="0" />
+    <group_state name="right_close" group="right_gripper">
+        <joint name="r_gripper_joint" value="0" />
+        <joint name="r_gripper_l_finger_joint" value="0.002" />
+        <joint name="r_gripper_l_finger_tip_joint" value="0.002" />
+        <joint name="r_gripper_motor_screw_joint" value="0" />
+        <joint name="r_gripper_r_finger_joint" value="0.002" />
+        <joint name="r_gripper_r_finger_tip_joint" value="0.002" />
+    </group_state>
+    <group_state name="left_open" group="left_gripper">
+        <joint name="l_gripper_joint" value="0.088" />
+        <joint name="l_gripper_l_finger_joint" value="0.477" />
+        <joint name="l_gripper_l_finger_tip_joint" value="0.477" />
+        <joint name="l_gripper_motor_screw_joint" value="1" />
+        <joint name="l_gripper_r_finger_joint" value="0.477" />
+        <joint name="l_gripper_r_finger_tip_joint" value="0.477" />
+    </group_state>
+    <group_state name="left_close" group="left_gripper">
+        <joint name="l_gripper_joint" value="0" />
+        <joint name="l_gripper_l_finger_joint" value="0.002" />
+        <joint name="l_gripper_l_finger_tip_joint" value="0.002" />
+        <joint name="l_gripper_motor_screw_joint" value="0" />
+        <joint name="l_gripper_r_finger_joint" value="0.002" />
+        <joint name="l_gripper_r_finger_tip_joint" value="0.002" />
+    </group_state>
+    <group_state name="ARMS_HOME" group="arms">
+        <joint name="l_elbow_flex_joint" value="-1.5" />
+        <joint name="l_forearm_roll_joint" value="1.5" />
+        <joint name="l_shoulder_lift_joint" value="0" />
+        <joint name="l_shoulder_pan_joint" value="1.5" />
+        <joint name="l_upper_arm_roll_joint" value="0" />
+        <joint name="l_wrist_flex_joint" value="-1" />
+        <joint name="l_wrist_roll_joint" value="0.15" />
+        <joint name="r_elbow_flex_joint" value="-1.5" />
+        <joint name="r_forearm_roll_joint" value="-1.5" />
+        <joint name="r_shoulder_lift_joint" value="0" />
+        <joint name="r_shoulder_pan_joint" value="-1.5" />
+        <joint name="r_upper_arm_roll_joint" value="0" />
+        <joint name="r_wrist_flex_joint" value="-1" />
+        <joint name="r_wrist_roll_joint" value="0" />
     </group_state>
     <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
-    <end_effector name="LEFT_GRIPPER" parent_link="l_wrist_roll_link" group="left_gripper" />
-    <end_effector name="RIGHT_GRIPPER" parent_link="r_wrist_roll_link" group="right_gripper" />
+    <end_effector name="LEFT_GRIPPER" parent_link="l_wrist_roll_link" group="left_gripper" parent_group="left_arm" />
+    <end_effector name="RIGHT_GRIPPER" parent_link="r_wrist_roll_link" group="right_gripper" parent_group="right_arm" />
     <!--VIRTUAL JOINT: Purpose: this element defines a virtual joint between a robot link and an external frame of reference (considered fixed with respect to the robot)-->
     <virtual_joint name="virtual_joint" type="fixed" parent_frame="odom_combined" child_link="base_footprint" />
     <!--PASSIVE JOINT: Purpose: this element is used to mark joints that are not actuated-->

@@ -42,8 +42,8 @@ public:
   void clickCallback(const geometry_msgs::Pose& pose);
   void markerCallback(const visualization_msgs::MarkerConstPtr& marker, moveit::planning_interface::PlanningSceneInterface& plan_scene,std::vector<moveit_msgs::CollisionObject>& collision_object_vector);
 
-  void gripper_open(std::string gripper);
-  void gripper_close(std::string gripper);
+  bool gripper_open(std::string gripper);
+  bool gripper_close(std::string gripper, float effort);
 
   void move_head(std::string frame_id, double x, double y, double z);
 
@@ -51,10 +51,12 @@ public:
 
   moveit::planning_interface::MoveGroupInterface& getMoveGroupInterface(std::string interface);
 
-  void moveTo(const geometry_msgs::Pose& pose);
+  bool moveTo(const geometry_msgs::Pose& pose, std::string interface);
 
-  void torsoUp();
-  void torsoDown();
+  void openGripper(trajectory_msgs::JointTrajectory& posture);
+  void closedGripper(trajectory_msgs::JointTrajectory& posture);
+
+  bool moveTorso(float position);
 
 private:
   ros::NodeHandle nh_;
@@ -66,14 +68,13 @@ private:
 
   // Define PlanningSceneInterface object to add and remove collision objects
   moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
-  moveit::planning_interface::MoveGroupInterface::Plan right_arm_plan, left_arm_plan;
 
   // Raw pointers are frequently used to refer to the planning group for improved performance.
   const robot_state::JointModelGroup* right_arm_joint_model_group;
   const robot_state::JointModelGroup* left_arm_joint_model_group;
   const robot_state::JointModelGroup* right_gripper_joint_model_group;
   const robot_state::JointModelGroup* left_gripper_joint_model_group;
-
+  
   // Our Action interface type, provided as a typedef for convenience
   typedef actionlib::SimpleActionClient<pr2_controllers_msgs::Pr2GripperCommandAction> GripperClient;
 
@@ -81,6 +82,7 @@ private:
   moveit::planning_interface::MoveGroupInterface left_arm_move_group;
   moveit::planning_interface::MoveGroupInterface right_gripper_move_group;
   moveit::planning_interface::MoveGroupInterface left_gripper_move_group;
+
 
   // Our Action interface type, provided as a typedef for convenience
   typedef actionlib::SimpleActionClient<pr2_controllers_msgs::PointHeadAction> PointHeadClient;

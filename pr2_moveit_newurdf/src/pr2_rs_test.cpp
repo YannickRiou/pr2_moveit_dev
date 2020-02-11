@@ -20,6 +20,9 @@ PR2RsTest::PR2RsTest(ros::NodeHandle nh)
   left_gripper_joint_model_group =
     left_gripper_move_group.getCurrentState()->getJointModelGroup(LEFT_GRIPPER_PLANNING_GROUP);
 
+
+
+  //***** Head controller *****//
   //Initialize the client for the Action interface to the head controller
   point_head_client_ = new PointHeadClient("/head_traj_controller/point_head_action", true);
 
@@ -28,20 +31,23 @@ PR2RsTest::PR2RsTest(ros::NodeHandle nh)
     ROS_INFO("Waiting for the point_head_action server to come up");
   }
 
+  //***** Grippers controllers *****//
   //Initialize the client for the Action interface to the gripper controller
   //and tell the action client that we want to spin a thread by default
   left_gripper_client_ = new GripperClient("l_gripper_controller/gripper_action", true);
   right_gripper_client_ = new GripperClient("r_gripper_controller/gripper_action", true); 
 
-  //wait for the gripper action server to come up 
+  //wait for the left gripper action server to come up 
   while(!left_gripper_client_->waitForServer(ros::Duration(5.0))){
     ROS_INFO("Waiting for the l_gripper_controller/gripper_action action server to come up");
   }
     
-  //wait for the gripper action server to come up 
+  //wait for the right gripper action server to come up 
   while(!right_gripper_client_->waitForServer(ros::Duration(5.0))){
     ROS_INFO("Waiting for the r_gripper_controller/gripper_action action server to come up");
   }
+
+  //***** Torso controller *****//
 
   torso_client_ = new TorsoClient("torso_controller/position_joint_action", true);
 
@@ -50,12 +56,13 @@ PR2RsTest::PR2RsTest(ros::NodeHandle nh)
     ROS_INFO("Waiting for the torso action server to come up");
   }
 
+  // Set Arm to initial pose
   right_arm_move_group.setNamedTarget("RIGHT_ARM_INITIAL_POSE");
   left_arm_move_group.setNamedTarget("LEFT_ARM_INITIAL_POSE");
 
+  // Move the arms to initial pose (away from robot vision)
   right_arm_move_group.move();
   left_arm_move_group.move();
-  
 }
 
 // Class destructor
@@ -71,36 +78,36 @@ PR2RsTest::~PR2RsTest()
   delete torso_client_;
 }
 
- void PR2RsTest::torsoUp()
- {
+bool PR2RsTest::moveTorso(float position)
+{
+  bool success;
 
-    pr2_controllers_msgs::SingleJointPositionGoal up;
-    up.position = 0.1;  //all the way up is 0.2
-    up.min_duration = ros::Duration(2.0);
-    up.max_velocity = 1.0;
-    
-    ROS_INFO("Sending up goal");
-    torso_client_->sendGoal(up);
-    torso_client_->waitForResult();
+  pr2_controllers_msgs::SingleJointPositionGoal move;
+  move.position = 0.1;  //all the way up is 0.2
+  move.min_duration = ros::Duration(2.0);
+  move.max_velocity = 1.0;
+  
+  torso_client_->sendGoal(move);
+  torso_client_->waitForResult();
+
+  if(torso_client_->getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
+  {
+    ROS_INFO("Torso command succeeded");
+    success = true;
   }
-
-  //tell the torso to go down
-  void PR2RsTest::torsoDown(){
-
-    pr2_controllers_msgs::SingleJointPositionGoal down;
-    down.position = 0.0;
-    down.min_duration = ros::Duration(2.0);
-    down.max_velocity = 1.0;
-
-    ROS_INFO("Sending down goal");
-    torso_client_->sendGoal(down);
-    torso_client_->waitForResult();
-  }    
-
+  else
+  {
+    ROS_ERROR("Torso command failed.");
+    success = false;
+  }
+  return success;
+}
 
 //Open the gripper
-void PR2RsTest::gripper_open(std::string gripper){
+bool PR2RsTest::gripper_open(std::string gripper)
+{
   pr2_controllers_msgs::Pr2GripperCommandGoal open;
+  bool success;
   open.command.position = 0.08;
   open.command.max_effort = -1.0;  // Do not limit effort (negative)
   
@@ -111,9 +118,15 @@ void PR2RsTest::gripper_open(std::string gripper){
     left_gripper_client_->waitForResult();
 
     if(left_gripper_client_->getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
-      ROS_INFO("The gripper opened!");
+    {
+      ROS_INFO("Left gripper opened!");
+      success = true;
+    }
     else
-      ROS_INFO("The gripper failed to open.");
+    {
+      ROS_ERROR("Left gripper failed to open.");
+      success = false;
+    }
   }
   else if(gripper == "right_gripper")
   {
@@ -121,17 +134,28 @@ void PR2RsTest::gripper_open(std::string gripper){
     right_gripper_client_->waitForResult();
 
     if(right_gripper_client_->getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
-      ROS_INFO("The gripper opened!");
+    {
+      ROS_INFO("Right gripper opened!");
+      success = true;
+    }
     else
-      ROS_INFO("The gripper failed to open.");
+    {
+      ROS_ERROR("Right gripper failed to open.");
+      success = false;
+    }
   }
+
+  return success;
 }
 
 //Close the gripper
-void PR2RsTest::gripper_close(std::string gripper){
+bool PR2RsTest::gripper_close(std::string gripper, float effort)
+{
   pr2_controllers_msgs::Pr2GripperCommandGoal squeeze;
+
+  bool success;
   squeeze.command.position = 0.0;
-  squeeze.command.max_effort = 50.0;  // Close gently
+  squeeze.command.max_effort = effort;  // Close gently
   
   if (gripper == "left_gripper")
   {
@@ -139,20 +163,32 @@ void PR2RsTest::gripper_close(std::string gripper){
     left_gripper_client_->sendGoal(squeeze);
     left_gripper_client_->waitForResult();
     if(left_gripper_client_->getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
-      ROS_INFO("The gripper closed!");
+    {
+      ROS_INFO("Left gripper closed!");
+      success = true;
+    }
     else
-      ROS_INFO("The gripper failed to close.");
-  }
-
-  if (gripper == "left_gripper")
+    {
+      ROS_ERROR("Left gripper failed to close.");
+       success = false;
+    }
+  } 
+  else if (gripper == "right_gripper")
   {
     right_gripper_client_->sendGoal(squeeze);
     right_gripper_client_->waitForResult();
     if(right_gripper_client_->getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
-      ROS_INFO("The gripper closed!");
+    {
+      ROS_INFO("Right gripper closed!");
+       success = true;
+    }
     else
-      ROS_INFO("The gripper failed to close.");
+    {
+      ROS_ERROR("Right gripper failed to close.");
+      success = false;
+    }
   }
+  return success;
 }
 
 void PR2RsTest::move_head(std::string frame_id, double x, double y, double z)
@@ -190,74 +226,97 @@ void PR2RsTest::move_head(std::string frame_id, double x, double y, double z)
 
 void PR2RsTest::clickCallback(const geometry_msgs::Pose& pose)
 {
-  geometry_msgs::Pose target_pose1;
-  target_pose1.orientation.x = pose.orientation.x;
-  target_pose1.orientation.y= pose.orientation.y;
-  target_pose1.orientation.z = pose.orientation.z;
-  target_pose1.orientation.w = pose.orientation.w;
-  target_pose1.position.x = pose.position.x-0.3;
-  target_pose1.position.y = pose.position.x;
-  target_pose1.position.z = pose.position.x;
-  right_arm_move_group.setPoseTarget(target_pose1);
+  geometry_msgs::Pose target_pose;
 
-  // Now, we call the planner to compute the plan and visualize it.
-  // Note that we are just planning, not asking move_group
-  // to actually move the robot.
   moveit::planning_interface::MoveGroupInterface::Plan my_plan;
 
-  bool success = (right_arm_move_group.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
+  target_pose.orientation.x = pose.orientation.x;
+  target_pose.orientation.y= pose.orientation.y;
+  target_pose.orientation.z = pose.orientation.z;
+  target_pose.orientation.w = pose.orientation.w;
+  target_pose.position.x = pose.position.x-0.3;
+  target_pose.position.y = pose.position.x;
+  target_pose.position.z = pose.position.x;
+  right_arm_move_group.setPoseTarget(target_pose);
 
-
-  std::cout << "***** Pose received is :" << std::endl;
-  std::cout << "--------- Position --------- " << std::endl;
-  std::cout << "X :" << pose.position.x << std::endl;
-  std::cout << "Y :" << pose.position.y << std::endl;
-  std::cout << "Z :" << pose.position.z << std::endl;
-  std::cout << "--------- Orientation ---------" << std::endl;
-  std::cout << "X :" << pose.orientation.x << std::endl;
-  std::cout << "Y :" << pose.orientation.y << std::endl;
-  std::cout << "Z :" << pose.orientation.z << std::endl;
-  std::cout << "W :" << pose.orientation.w << std::endl;
-  std::cout << "---------------------" << std::endl; 
-
-  //Uncomment to make the robot execute the planned move
+  right_arm_move_group.setPoseTarget(target_pose);
+  right_arm_move_group.plan(my_plan);
   right_arm_move_group.move();
+ 
 }
 
-void PR2RsTest::moveTo(const geometry_msgs::Pose& pose)
+bool PR2RsTest::moveTo(const geometry_msgs::Pose& pose, std::string interface)
 {
-  geometry_msgs::Pose target_pose1;
-  target_pose1.orientation.x = pose.orientation.x;
-  target_pose1.orientation.y= pose.orientation.y;
-  target_pose1.orientation.z = pose.orientation.z;
-  target_pose1.orientation.w = pose.orientation.w;
-  target_pose1.position.x = pose.position.x;
-  target_pose1.position.y = pose.position.y;
-  target_pose1.position.z = pose.position.z;
-  right_arm_move_group.setPoseTarget(target_pose1);
-
-  // Now, we call the planner to compute the plan and visualize it.
-  // Note that we are just planning, not asking move_group
-  // to actually move the robot.
+  geometry_msgs::Pose target_pose;
   moveit::planning_interface::MoveGroupInterface::Plan my_plan;
+  bool success;
 
-  bool success = (right_arm_move_group.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
+  target_pose.orientation.x = pose.orientation.x;
+  target_pose.orientation.y= pose.orientation.y;
+  target_pose.orientation.z = pose.orientation.z;
+  target_pose.orientation.w = pose.orientation.w;
+  target_pose.position.x = pose.position.x;
+  target_pose.position.y = pose.position.y;
+  target_pose.position.z = pose.position.z;
+
+  if(interface == "right_arm_move_group")
+  {
+    right_arm_move_group.setPoseTarget(target_pose);
+    success = (right_arm_move_group.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
+    right_arm_move_group.move();
+  }
+  else
+  {
+    left_arm_move_group.setPoseTarget(target_pose);
+    success = (left_arm_move_group.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
+    left_arm_move_group.move();
+  }
+  return success;  
+}
 
 
-  std::cout << "***** Pose received is :" << std::endl;
-  std::cout << "--------- Position --------- " << std::endl;
-  std::cout << "X :" << pose.position.x << std::endl;
-  std::cout << "Y :" << pose.position.y << std::endl;
-  std::cout << "Z :" << pose.position.z << std::endl;
-  std::cout << "--------- Orientation ---------" << std::endl;
-  std::cout << "X :" << pose.orientation.x << std::endl;
-  std::cout << "Y :" << pose.orientation.y << std::endl;
-  std::cout << "Z :" << pose.orientation.z << std::endl;
-  std::cout << "W :" << pose.orientation.w << std::endl;
-  std::cout << "---------------------" << std::endl; 
+void PR2RsTest::openGripper(trajectory_msgs::JointTrajectory& posture)
+{
+  posture.joint_names.resize(6);
+  posture.joint_names[0] = "l_gripper_joint";
+  posture.joint_names[1] = "l_gripper_motor_screw_joint";
+  posture.joint_names[2] = "l_gripper_l_finger_joint";
+  posture.joint_names[3] = "l_gripper_r_finger_joint";
+  posture.joint_names[4] = "l_gripper_r_finger_tip_joint";
+  posture.joint_names[5] = "l_gripper_l_finger_tip_joint";
 
-  //Uncomment to make the robot execute the planned move
-  right_arm_move_group.move();
+  /* Set them as open, wide enough for the object to fit. */
+  posture.points.resize(1);
+  posture.points[0].positions.resize(6);
+  posture.points[0].positions[0] = 0.088;
+  posture.points[0].positions[1] = 1;
+  posture.points[0].positions[2] = 0.477;
+  posture.points[0].positions[3] = 0.477;
+  posture.points[0].positions[4] = 0.477;
+  posture.points[0].positions[5] = 0.477;
+  posture.points[0].time_from_start = ros::Duration(20);
+}
+
+void PR2RsTest::closedGripper(trajectory_msgs::JointTrajectory& posture)
+{
+  posture.joint_names.resize(6);
+  posture.joint_names[0] = "l_gripper_joint";
+  posture.joint_names[1] = "l_gripper_motor_screw_joint";
+  posture.joint_names[2] = "l_gripper_l_finger_joint";
+  posture.joint_names[3] = "l_gripper_r_finger_joint";
+  posture.joint_names[4] = "l_gripper_r_finger_tip_joint";
+  posture.joint_names[5] = "l_gripper_l_finger_tip_joint";
+
+  /* Set them as open, wide enough for the object to fit. */
+  posture.points.resize(1);
+  posture.points[0].positions.resize(6);
+  posture.points[0].positions[0] = 0.00;
+  posture.points[0].positions[1] = 0.00;
+  posture.points[0].positions[2] = 0.002;
+  posture.points[0].positions[3] = 0.002;
+  posture.points[0].positions[4] = 0.002;
+  posture.points[0].positions[5] = 0.002;
+  posture.points[0].time_from_start = ros::Duration(20);
 }
 
 void PR2RsTest::pickplace(moveit::planning_interface::MoveGroupInterface& move_group,std::vector<moveit_msgs::CollisionObject>& collision_object_vector)
@@ -270,7 +329,7 @@ void PR2RsTest::pickplace(moveit::planning_interface::MoveGroupInterface& move_g
 
   for(auto obj : collision_object_vector)
   {
-    if(obj.id.find("obj_") != std::string::npos)
+    if(obj.id.find("obj_2") != std::string::npos)
     {
       target_pose = obj.primitive_poses[0];
       target_dimension = obj.primitives[0];
@@ -279,78 +338,90 @@ void PR2RsTest::pickplace(moveit::planning_interface::MoveGroupInterface& move_g
   }
 
   std::cout << "***** Obj.id is :" << id << std::endl;
-/*
-  std::cout << "***** Grasp Pose is :" << std::endl;
-  std::cout << "--------- Position --------- " << std::endl;
-  std::cout << "X :" << target_pose.position.x << std::endl;
-  std::cout << "Y :" << target_pose.position.y << std::endl;
-  std::cout << "Z :" << target_pose.position.z << std::endl;
-  std::cout << "--------- Orientation ---------" << std::endl;
-  std::cout << "X :" << target_pose.orientation.x << std::endl;
-  std::cout << "Y :" << target_pose.orientation.y << std::endl;
-  std::cout << "Z :" << target_pose.orientation.z << std::endl;
-  std::cout << "W :" << target_pose.orientation.w << std::endl;
-  std::cout << "--------- Dimensions ---------" << std::endl;
-  std::cout << "X :" << target_dimension.dimensions[0] << std::endl;
-  std::cout << "Y :" << target_dimension.dimensions[1]<< std::endl;
-  std::cout << "Z :" << target_dimension.dimensions[2] << std::endl;
-  std::cout << "---------------------" << std::endl; 
-*/
+
+  /*********  PICK **********/
+
   // Setting grasp pose
   // ++++++++++++++++++++++
   grasps[0].grasp_pose.header.frame_id = "base_footprint";
-  //grasps[0].grasp_pose.pose.orientation.x = target_pose.orientation.x;
-  //grasps[0].grasp_pose.pose.orientation.y = target_pose.orientation.y;
-  //grasps[0].grasp_pose.pose.orientation.z = target_pose.orientation.z;
-  //grasps[0].grasp_pose.pose.orientation.w = target_pose.orientation.w;
-
-  grasps[0].grasp_pose.pose.position.x = target_pose.position.x-(target_dimension.dimensions[shape_msgs::SolidPrimitive::CYLINDER_RADIUS]/2.0)-0.2;
+  grasps[0].grasp_pose.pose.orientation.x = 0;
+  grasps[0].grasp_pose.pose.orientation.y = 0;
+  grasps[0].grasp_pose.pose.orientation.z = 0.2;
+  grasps[0].grasp_pose.pose.orientation.w = 0;
+  grasps[0].grasp_pose.pose.position.x = target_pose.position.x-(target_dimension.dimensions[shape_msgs::SolidPrimitive::CYLINDER_RADIUS]/2.0)-0.15;
   grasps[0].grasp_pose.pose.position.y = target_pose.position.y;
   grasps[0].grasp_pose.pose.position.z = target_pose.position.z+(target_dimension.dimensions[shape_msgs::SolidPrimitive::CYLINDER_RADIUS]/2.0)+0.05;
 
-  std::cout << "--------- Grasp Pose X ---------" << std::endl;
-  std::cout << "X :" << grasps[0].grasp_pose.pose.position.x << std::endl;
-  std::cout << "Y :" << grasps[0].grasp_pose.pose.position.y << std::endl;
-  std::cout << "Z :" << grasps[0].grasp_pose.pose.position.z << std::endl;
-  std::cout << "---------------------" << std::endl;
+  std::cout << "Object position is :" << std::endl;
+  std::cout << "X :" <<  target_pose.position.x << std::endl;
+  std::cout << "Y :" <<  target_pose.position.y << std::endl;
+  std::cout << "Z :" <<  target_pose.position.z << std::endl;
 
   // Setting pre-grasp approach
   // ++++++++++++++++++++++++++
-  /* Defined with respect to frame_id */
+  // Defined with respect to frame_id 
   grasps[0].pre_grasp_approach.direction.header.frame_id = "base_footprint";
-  /* Direction is set as positive x axis */
-  grasps[0].pre_grasp_approach.direction.vector.x = 1.0;
+  // Direction is set as positive x axis 
+  grasps[0].pre_grasp_approach.direction.vector.y = 1.0;
   grasps[0].pre_grasp_approach.min_distance = 0.095;
-  grasps[0].pre_grasp_approach.desired_distance = 0.115;
+  grasps[0].pre_grasp_approach.desired_distance = 0.10;
 
   // Setting post-grasp retreat
   // ++++++++++++++++++++++++++
-  /* Defined with respect to frame_id */
+  // Defined with respect to frame_id 
   grasps[0].post_grasp_retreat.direction.header.frame_id = "base_footprint";
-  /* Direction is set as positive z axis */
+  // Direction is set as positive z axis 
   grasps[0].post_grasp_retreat.direction.vector.z = 1;
   grasps[0].post_grasp_retreat.min_distance = 0.1;
   grasps[0].post_grasp_retreat.desired_distance = 0.25;
 
+  // Setting posture of eef before grasp
+  // +++++++++++++++++++++++++++++++++++
+  openGripper(grasps[0].pre_grasp_posture);
 
-  grasps[0].pre_grasp_posture.joint_names.resize(1, "r_gripper_motor_screw_joint");
-  grasps[0].pre_grasp_posture.points.resize(1);
-  grasps[0].pre_grasp_posture.points[0].positions.resize(1);
-  grasps[0].pre_grasp_posture.points[0].positions[0] = 0.08;
-  grasps[0].pre_grasp_posture.points[0].time_from_start = ros::Duration(5.0);
-
-  grasps[0].grasp_posture.joint_names.resize(1, "r_gripper_motor_screw_joint");
-  grasps[0].grasp_posture.points.resize(1);
-  grasps[0].grasp_posture.points[0].positions.resize(1);
-  grasps[0].grasp_posture.points[0].positions[0] = 0.0;
-  grasps[0].grasp_posture.points[0].time_from_start = ros::Duration(5.0);
+  // Setting posture of eef during grasp
+  // +++++++++++++++++++++++++++++++++++
+  closedGripper(grasps[0].grasp_posture);
 
   // Set support surface as table1.
   move_group.setSupportSurfaceName("tableLaas");
 
   // Call pick to pick up the object using the grasps given
+  if(move_group.pick(id, grasps))
+  {
+    /*********  PLACE **********/
 
-  move_group.pick(id, grasps);
+    std::vector<moveit_msgs::PlaceLocation> place_location;
+    place_location.resize(1);
+
+    place_location[0].place_pose.header.frame_id = "base_footprint";
+
+    /* While placing it is the exact location of the center of the object. */
+    place_location[0].place_pose.pose.position.x = target_pose.position.x-(target_dimension.dimensions[shape_msgs::SolidPrimitive::CYLINDER_RADIUS]/2.0)-0.20;
+    place_location[0].place_pose.pose.position.y = target_pose.position.y + 0.5;
+    place_location[0].place_pose.pose.position.z = target_pose.position.z+(target_dimension.dimensions[shape_msgs::SolidPrimitive::CYLINDER_RADIUS]/2.0)+0.05;
+
+
+    /* Defined with respect to frame_id */
+    place_location[0].pre_place_approach.direction.header.frame_id = "base_footprint";
+    /* Direction is set as negative z axis */
+    place_location[0].pre_place_approach.direction.vector.z = -1.0;
+    place_location[0].pre_place_approach.min_distance = 0.03;
+    place_location[0].pre_place_approach.desired_distance = 0.27;
+
+    /* Defined with respect to frame_id */
+    place_location[0].post_place_retreat.direction.header.frame_id = "base_footprint";
+    /* Direction is set as negative y axis */
+    place_location[0].post_place_retreat.direction.vector.x = -1.0;
+    place_location[0].post_place_retreat.min_distance = 0.1;
+    place_location[0].post_place_retreat.desired_distance = 0.25;
+
+    /* Similar to the pick case */
+    openGripper(place_location[0].post_place_posture);  
+
+    // Call pick to pick up the object using the grasps given
+    move_group.place(id, place_location);
+  }
 }
 
 void PR2RsTest::markerCallback(const visualization_msgs::MarkerConstPtr& marker, moveit::planning_interface::PlanningSceneInterface& plan_scene,std::vector<moveit_msgs::CollisionObject>& collision_object_vector)
@@ -360,8 +431,6 @@ void PR2RsTest::markerCallback(const visualization_msgs::MarkerConstPtr& marker,
   collisionObj.id = marker->text;
 
   collisionObj.header.frame_id = "base_footprint";
-  
-  // Define a box to add to the world.
   shape_msgs::SolidPrimitive collisionObj_primitive;
 
   // Check the type of the marker. We search for CUBE and CYCLINDER only
@@ -379,13 +448,18 @@ void PR2RsTest::markerCallback(const visualization_msgs::MarkerConstPtr& marker,
     collisionObj_primitive.dimensions.resize(2);
     collisionObj_primitive.dimensions[shape_msgs::SolidPrimitive::CYLINDER_RADIUS] = marker->scale.x/2.0;
     collisionObj_primitive.dimensions[shape_msgs::SolidPrimitive::CYLINDER_HEIGHT] = marker->scale.z; 
+
+
+    std::cout << "Object Size is :" << std::endl;
+    std::cout << "Radius :" << marker->scale.x/2.0 << std::endl;
+    std::cout << "Height :" <<  marker->scale.z << std::endl;
   }
   else 
   {
     return;
   }
 
-  // Define a pose for the box (specified relative to frame_id)
+  // Define a pose for the object (specified relative to frame_id)
   geometry_msgs::Pose collisionObj_pose;
   collisionObj_pose.position.x = marker->pose.position.x;
   collisionObj_pose.position.y = marker->pose.position.y;
@@ -394,8 +468,6 @@ void PR2RsTest::markerCallback(const visualization_msgs::MarkerConstPtr& marker,
   collisionObj_pose.orientation.x = marker->pose.orientation.x;
   collisionObj_pose.orientation.y = marker->pose.orientation.y;
   collisionObj_pose.orientation.z = marker->pose.orientation.z;
-  collisionObj_pose.orientation.w = marker->pose.orientation.w;
-
 
   collisionObj.primitives.push_back(collisionObj_primitive);
   collisionObj.primitive_poses.push_back(collisionObj_pose);
@@ -406,6 +478,7 @@ void PR2RsTest::markerCallback(const visualization_msgs::MarkerConstPtr& marker,
   // Now, let's add the collision object into the world
   // Little sleep necessary before adding it
   ros::Duration(0.2).sleep();
+  // Add the remaining collision object 
   plan_scene.addCollisionObjects(collision_object_vector);
 }
 
@@ -446,16 +519,20 @@ int main(int argc, char *argv[])
 
   PR2RsTest pr2_rs(n);
 
+  // Init pose
   pr2_rs.move_head("base_footprint",1.2,-0.2,0.36);
+  pr2_rs.moveTorso(0.1);
   
-  pr2_rs.torsoUp();
+  pr2_rs.gripper_close("left_gripper",25);
+  pr2_rs.gripper_close("right_gripper",25);   
 
-  ros::Duration(5).sleep(); 
+  // Wait for robosherlock to detect the object after moving the head
+  ros::Duration(2).sleep(); 
   
   // Susbscribe to topic given by Rviz when "Publish Point" tool is used on an object
   ros::Subscriber click_sub = n.subscribe("/clicked_object_pose", 1000, &PR2RsTest::clickCallback,&pr2_rs);
 
-  // Susbscribe to topic giving the marker to show the object as boxes in Rviz
+  // Subscribe to topic giving the marker (RoboSherlock) to show the object as boxes in Rviz
   ros::Subscriber marker_sub = n.subscribe<visualization_msgs::Marker>("/visualization_marker", 1000, boost::bind(&PR2RsTest::markerCallback,&pr2_rs,_1,boost::ref(planning_scene_interface),boost::ref(collision_objects_vector)));
      
   // Add table as a fixed collision object. 
@@ -484,37 +561,15 @@ int main(int argc, char *argv[])
   collision_objects_vector.push_back(mainTable);
 
   // Now, let's add the collision object into the world
-  ROS_INFO_NAMED("tutorial", "Add an object into the world");
+  ROS_INFO("Added tableLaas into the world");
   ros::Duration(0.5).sleep();
   planning_scene_interface.addCollisionObjects(collision_objects_vector);
-       
-  
-  pr2_rs.gripper_open("left_gripper");
-  pr2_rs.gripper_open("right_gripper");
 
-  std::cout << "**** RS Demo Init Done" << std::endl;
-   
-
-  ros::Duration(1).sleep(); 
-  marker_sub.shutdown();
   std::cout << "**** Trying Pick" << std::endl;
-  pr2_rs.pickplace(pr2_rs.getMoveGroupInterface("right_arm_move_group"),collision_objects_vector);
+  ros::Duration(2).sleep();
+  marker_sub.shutdown();
+  pr2_rs.pickplace(pr2_rs.getMoveGroupInterface("left_arm_move_group"),collision_objects_vector);
 
-  //geometry_msgs::PoseStamped current_pose = pr2_rs.getMoveGroupInterface("right_arm_move_group").getCurrentPose();
-
-/*std::cout << "--------- Current pose ---------" << std::endl;
-  std::cout << "X :" << current_pose.pose.position.x << std::endl;
-  std::cout << "Y :" << current_pose.pose.position.y << std::endl;
-  std::cout << "Z :" << current_pose.pose.position.z << std::endl;
-  std::cout << "---------------------" << std::endl;*/
-/*
-  geometry_msgs::Pose tPose;
-  tPose.position.x = 0.586008;
-  tPose.position.y = -0.317001;
-  tPose.position.z = 1.02814;
-
-  pr2_rs.moveTo(tPose);
-*/
   ros::waitForShutdown();
   return 0;
 }
