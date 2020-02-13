@@ -1,0 +1,8 @@
+#goal definition
+geometry_msgs/Pose posePlace 
+---
+#result definition
+moveit_msgs/MoveItErrorCodes error_code
+---
+#feedback
+int32 status
