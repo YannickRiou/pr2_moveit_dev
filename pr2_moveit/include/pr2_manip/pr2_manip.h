@@ -44,15 +44,24 @@
 #include "pr2_moveit/placeAction.h"
 #include "pr2_moveit/moveAction.h"
 
+// Toaster related include
+#include <toaster_msgs/ObjectListStamped.h>
 
-class PR2RsTest
+// Ontology related include
+#include "ontologenius_query/OntologeniusQueryFullService.h"
+#include "ontologenius_query/OntologeniusQueryResponse.h"
+
+// Tf2 related include
+ #include <tf2_ros/transform_listener.h>
+
+// Various defines
+#define ONTOLOGY_NS "robot"
+
+class PR2manip
 {
 public:
-  explicit PR2RsTest(ros::NodeHandle nh);
-  ~PR2RsTest();
-
-  void clickCallback(const geometry_msgs::Pose& pose);
-  void markerCallback(const visualization_msgs::MarkerConstPtr& marker, moveit::planning_interface::PlanningSceneInterface& plan_scene);
+  explicit PR2manip(ros::NodeHandle nh);
+  ~PR2manip();
 
   bool gripper_open(std::string gripper);
   bool gripper_close(std::string gripper, float effort);
@@ -65,18 +74,34 @@ public:
 
   bool moveTo(const geometry_msgs::Pose& pose, std::string interface);
 
-  void openGripper(trajectory_msgs::JointTrajectory& posture);
-  void closedGripper(trajectory_msgs::JointTrajectory& posture);
+  void openGripper(trajectory_msgs::JointTrajectory& posture, std::string side);
+  void closedGripper(trajectory_msgs::JointTrajectory& posture, std::string side);
 
-  //bool pickObj(pr2_moveit::pickObj::Request  &req, pr2_moveit::pickObj::Response &res);
-  //bool placeObj(pr2_moveit::placeObj::Request  &req, pr2_moveit::placeObj::Response &res);
+  void pickObj(const pr2_moveit::pickGoalConstPtr& goal,  actionlib::SimpleActionServer<pr2_moveit::pickAction>* pickServer);
+  void placeObj(const pr2_moveit::placeGoalConstPtr& goal,  actionlib::SimpleActionServer<pr2_moveit::placeAction>* placeServer);
+  void move(const pr2_moveit::moveGoalConstPtr& goal, actionlib::SimpleActionServer<pr2_moveit::moveAction>* moveServer);
 
   std::vector<moveit_msgs::CollisionObject>& getCollisionObjVector();
 
+  void objCallback (const toaster_msgs::ObjectListStamped::ConstPtr& msg);
+
   bool moveTorso(float position);
+
+  void setToasterSub(ros::Subscriber sub);
+  void setOntoClient(ros::ServiceClient srv);
 
 private:
   ros::NodeHandle nh_;
+
+  // Subscriber to toaster to get objects in the scene
+  ros::Subscriber toaster_sub_;
+
+  // Client to ask ontology about mesh and poses of objects in the scene
+  ros::ServiceClient ontoClient_;
+
+  // TF Listener to do transforms between two frame
+  tf2_ros::Buffer tfBuffer_;
+  tf2_ros::TransformListener tfListener_;
 
   const std::string RIGHT_ARM_PLANNING_GROUP = "right_arm";
   const std::string LEFT_ARM_PLANNING_GROUP = "left_arm";
@@ -113,11 +138,12 @@ private:
 
   TorsoClient* torso_client_;
 
-
   // Store the collision objects added to the scene
   std::vector<moveit_msgs::CollisionObject> collision_objects_vector_;
 
-  std::string objPicked_;
+  // Remember object that was pick and also with which arm
+  std::string objPickedId_;
+  std::string armUsed_;
 
   typedef actionlib::SimpleActionServer<pr2_moveit::pickAction> pickActionServer;
   pr2_moveit::pickFeedback pickFeedback_;

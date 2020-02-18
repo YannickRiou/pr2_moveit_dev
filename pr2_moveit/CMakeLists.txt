@@ -22,12 +22,14 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   actionlib
   actionlib_msgs
+	tf2_ros
+	tf2_geometry_msgs
 )
 find_package(Boost REQUIRED)
 
 add_action_files(
-  DIRECTORY action 
-  FILES   
+  DIRECTORY action
+  FILES
   move.action
   pick.action
   place.action
@@ -58,7 +60,7 @@ catkin_package(
 #  LIBRARIES pr2_pickplace
 #  CATKIN_DEPENDS sensor_msgs
 #  DEPENDS system_lib
-CATKIN_DEPENDS actionlib_msgs
+CATKIN_DEPENDS actionlib_msgs tf2_ros tf2_geometry_msgs
 )
 
 ###########
@@ -69,9 +71,9 @@ CATKIN_DEPENDS actionlib_msgs
 ## Your package locations should be listed before other locations
 include_directories(include ${Boost_INCLUDE_DIRS} ${catkin_INCLUDE_DIRS})
 
-add_executable(pr2_rs_test src/pr2_rs_test.cpp)
-add_dependencies(pr2_rs_test ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS} ${PROJECT_NAME}_generate_messages_cpp )
-target_link_libraries(pr2_rs_test ${catkin_LIBRARIES})
+add_executable(pr2_manip src/pr2_manip.cpp)
+add_dependencies(pr2_manip ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS} ${PROJECT_NAME}_generate_messages_cpp )
+target_link_libraries(pr2_manip ${catkin_LIBRARIES})
 
 add_executable(pickClient src/pickClient.cpp)
 add_dependencies(pickClient ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS} ${PROJECT_NAME}_generate_messages_cpp )
