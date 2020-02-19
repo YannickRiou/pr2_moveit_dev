@@ -51,7 +51,7 @@ namespace pr2_moveit_controller_manager
 {
 
 /// Maximum effort the PR2 gripper is allowed to exert (read as 'very large value'); this is PR2 specific
-static const double DEFAULT_MAX_GRIPPER_EFFORT = 20.0;
+static const double DEFAULT_MAX_GRIPPER_EFFORT = 30.0;
 
 /// The distance between the PR2 gripper fingers when fully open (in m); this is PR2 specific
 static const double GRIPPER_OPEN = 0.086;

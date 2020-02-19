@@ -53,8 +53,8 @@ public:
 
   bool moveTo(const geometry_msgs::Pose& pose, std::string interface);
 
-  void openGripper(trajectory_msgs::JointTrajectory& posture);
-  void closedGripper(trajectory_msgs::JointTrajectory& posture);
+  void openGripper(trajectory_msgs::JointTrajectory& posture,std::string armUsed);
+  void closedGripper(trajectory_msgs::JointTrajectory& posture,std::string armUsed);
 
   bool moveTorso(float position);
 
@@ -74,7 +74,7 @@ private:
   const robot_state::JointModelGroup* left_arm_joint_model_group;
   const robot_state::JointModelGroup* right_gripper_joint_model_group;
   const robot_state::JointModelGroup* left_gripper_joint_model_group;
-  
+
   // Our Action interface type, provided as a typedef for convenience
   typedef actionlib::SimpleActionClient<pr2_controllers_msgs::Pr2GripperCommandAction> GripperClient;
 
@@ -87,7 +87,7 @@ private:
   // Our Action interface type, provided as a typedef for convenience
   typedef actionlib::SimpleActionClient<pr2_controllers_msgs::PointHeadAction> PointHeadClient;
 
-  GripperClient* left_gripper_client_;  
+  GripperClient* left_gripper_client_;
   GripperClient* right_gripper_client_;
 
   PointHeadClient* point_head_client_;
