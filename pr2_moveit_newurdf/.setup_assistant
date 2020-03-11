@@ -8,4 +8,4 @@ moveit_setup_assistant_config:
   CONFIG:
     author_name: Yannick Riou
     author_email: yannick.riou@laas.fr
-    generated_timestamp: 1581349245
+    generated_timestamp: 1582882614
