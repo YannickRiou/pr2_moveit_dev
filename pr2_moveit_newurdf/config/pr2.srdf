@@ -94,7 +94,7 @@
     </group_state>
     <group_state name="head_table_looking" group="head">
         <joint name="head_pan_joint" value="0" />
-        <joint name="head_tilt_joint" value="0.4" />
+        <joint name="head_tilt_joint" value="0.7" />
     </group_state>
     <group_state name="head_up" group="head">
         <joint name="head_pan_joint" value="0" />
@@ -102,6 +102,9 @@
     </group_state>
     <group_state name="torso_up" group="torso">
         <joint name="torso_lift_joint" value="0.325" />
+    </group_state>
+    <group_state name="torso_middle" group="torso">
+        <joint name="torso_lift_joint" value="0.100" />
     </group_state>
     <group_state name="torso_down" group="torso">
         <joint name="torso_lift_joint" value="0.0115" />
