@@ -8,6 +8,8 @@
   <!-- By default, we are not in debug mode -->
   <arg name="debug" default="false" />
 
+ <node pkg="tf" type="static_transform_publisher" name="virtual_joint_broadcaster_0" args="0 0 0 0 0 0 odom_combined base_footprint 100" />
+
   <!--
   By default, hide joint_state_publisher's GUI
 
@@ -38,7 +40,7 @@
   <!-- Run the main MoveIt! executable without trajectory execution (we do not have controllers configured by default) -->
   <include file="$(find pr2_moveit_newurdf)/launch/move_group.launch">
     <arg name="allow_trajectory_execution" value="true"/>
-    <arg name="fake_execution" value="true"/>
+    <arg name="fake_execution" value="false"/>
     <arg name="info" value="true"/>
     <arg name="debug" value="$(arg debug)"/>
   </include>

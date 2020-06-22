@@ -65,6 +65,7 @@ private:
   const std::string LEFT_ARM_PLANNING_GROUP = "left_arm";
   const std::string RIGHT_GRIPPER_PLANNING_GROUP = "right_gripper";
   const std::string LEFT_GRIPPER_PLANNING_GROUP = "left_gripper";
+  const std::string HEAD_PLANNING_GROUP = "head";
 
   // Define PlanningSceneInterface object to add and remove collision objects
   moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
@@ -75,6 +76,8 @@ private:
   const robot_state::JointModelGroup* right_gripper_joint_model_group;
   const robot_state::JointModelGroup* left_gripper_joint_model_group;
 
+  const robot_state::JointModelGroup* head_joint_model_group;
+
   // Our Action interface type, provided as a typedef for convenience
   typedef actionlib::SimpleActionClient<pr2_controllers_msgs::Pr2GripperCommandAction> GripperClient;
 
@@ -82,6 +85,8 @@ private:
   moveit::planning_interface::MoveGroupInterface left_arm_move_group;
   moveit::planning_interface::MoveGroupInterface right_gripper_move_group;
   moveit::planning_interface::MoveGroupInterface left_gripper_move_group;
+
+  moveit::planning_interface::MoveGroupInterface head_move_group;
 
 
   // Our Action interface type, provided as a typedef for convenience

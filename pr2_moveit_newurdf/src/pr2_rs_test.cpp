@@ -7,7 +7,8 @@ PR2RsTest::PR2RsTest(ros::NodeHandle nh)
     right_arm_move_group(RIGHT_ARM_PLANNING_GROUP),
     left_arm_move_group(LEFT_ARM_PLANNING_GROUP),
     right_gripper_move_group(RIGHT_GRIPPER_PLANNING_GROUP),
-    left_gripper_move_group(LEFT_GRIPPER_PLANNING_GROUP)
+    left_gripper_move_group(LEFT_GRIPPER_PLANNING_GROUP),
+    head_move_group(HEAD_PLANNING_GROUP)
 {
 
   // Pointer to JointModelGroup for improved performance.
@@ -19,6 +20,9 @@ PR2RsTest::PR2RsTest(ros::NodeHandle nh)
     right_gripper_move_group.getCurrentState()->getJointModelGroup(RIGHT_GRIPPER_PLANNING_GROUP);
   left_gripper_joint_model_group =
     left_gripper_move_group.getCurrentState()->getJointModelGroup(LEFT_GRIPPER_PLANNING_GROUP);
+
+  head_joint_model_group =
+      head_move_group.getCurrentState()->getJointModelGroup(HEAD_PLANNING_GROUP);
 
 
 

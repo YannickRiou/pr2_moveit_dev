@@ -37,7 +37,6 @@ add_compile_options(-std=c++11)
 include_directories(pr2_arm_kinematics/include)
 include_directories(pr2_moveit_controller_manager/include)
 include_directories(pr2_moveit_sensor_manager/include)
-#include_directories(pr2_moveit_constraint_sampler/include)
 
 
 include_directories(SYSTEM ${EIGEN_INCLUDE_DIRS} ${Boost_INCLUDE_DIR})
@@ -49,14 +48,12 @@ link_directories(${catkin_LIBRARY_DIRS})
 add_subdirectory(pr2_arm_kinematics)
 add_subdirectory(pr2_moveit_controller_manager)
 add_subdirectory(pr2_moveit_sensor_manager)
-#add_subdirectory(pr2_moveit_constraint_sampler)
 
 install(
   FILES
     pr2_moveit_kinematics_plugin_description.xml
     pr2_moveit_controller_manager_plugin_description.xml
     pr2_moveit_sensor_manager_plugin_description.xml
-#    pr2_moveit_constraint_sampler_plugin_description.xml
   DESTINATION
     ${CATKIN_PACKAGE_SHARE_DESTINATION}
     )
